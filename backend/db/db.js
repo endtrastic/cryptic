@@ -13,7 +13,7 @@ require('dotenv').config();
 //   }
 // );
 
-
+// did it work?
 // module.exports = sequelize;
 
 const { Sequelize } = require('sequelize');
