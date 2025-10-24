@@ -1,10 +1,8 @@
 'use strict';
-const Cryptocurrency = require('./Cryptocurrency');
 const {
   Model,
   ForeignKeyConstraintError
 } = require('sequelize');
-const cryptocurrency = require('./cryptocurrency');
 module.exports = (sequelize, DataTypes) => {
   class CurrencyData extends Model {
     /**
@@ -14,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // associate
-      CurrencyData.belongsTo(models.Cryptocurrency, {
+      CurrencyData.belongsTo(models.CryptoCurrency, {
         foreignKey: "crypto_id",
         as: "chartdata",
       })
@@ -30,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     crypto_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Cryptocurrencies', 
+        model: 'CryptoCurrency', 
         key: 'id'
       },
       allowNull: false

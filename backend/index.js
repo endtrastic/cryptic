@@ -1,6 +1,7 @@
 require('dotenv').config({ path: './.env' })
 const express = require("express");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const dataRoutes = require('./router/authRoutes');
 const app = express();
@@ -14,7 +15,7 @@ PORTfavor = process.env.PORT
 
 
 
-console.log(process.env.DB_HOST);
+console.log("DB HOST, AND THE JWT TOKEN:", process.env.DB_HOST, process.env.JWT_TOKEN);
 
 
 
@@ -35,6 +36,34 @@ app.use(
 
 
 app.use('/api', dataRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
+app.get("/auth/verify", (req, res) => {
+  const token = req.cookies.authToken;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
+    return res.json({ authenticated: true, id: decoded.id });
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie("authToken");
+  return res.json({ message: "Logged out successfully" });
+});
+
+
+
+
 
 
 

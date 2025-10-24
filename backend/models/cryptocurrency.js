@@ -2,10 +2,8 @@
 const {
   Model
 } = require('sequelize');
-const currencydata = require('./currencydata');
-const CurrencyData = require('./currencydata')
 module.exports = (sequelize, DataTypes) => {
-  class Cryptocurrency extends Model {
+  class CryptoCurrency extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,17 +11,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Cryptocurrency.hasMany(models.CurrencyData, {
+      CryptoCurrency.hasMany(models.CurrencyData, {
         foreignKey: "crypto_id",
         as: "dataPoints", 
       });
-      Cryptocurrency.hasMany(models.ChartData, {
+      CryptoCurrency.hasMany(models.ChartData, {
         foreignKey: "crypto_id",
         as: "chart", 
       });
     }
   }
-  Cryptocurrency.init({
+  CryptoCurrency.init({
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -43,7 +41,8 @@ module.exports = (sequelize, DataTypes) => {
 
   }, {
     sequelize,
-    modelName: 'Cryptocurrency',
+    modelName: 'CryptoCurrency',
   });
-  return Cryptocurrency;
+  return CryptoCurrency;
 };
+

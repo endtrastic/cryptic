@@ -4,43 +4,59 @@ const con = require('../db/db');
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const axios = require('axios');
-const { Cryptocurrencies, CurrencyData } = '../models'
-const { Op } = require('sequelize')
+const { User } = require('../models')
+const { CryptoCurrency } = require('../models');
+
+
 
 const captchas = {}
-// Temporarily disable captcha for more accounts
-const createUser = async (req, res) => {
-    const { email, password, name, captcha } = req.body;
 
-    if (!email || !password || !name || !captcha) {
-      return res.status(400).json({ error: "Please enter valid username, email, password, captcha, dumass" });
+
+
+// Temporarily disable captcha for more accounts
+// Reeusing my login logic from an old project
+
+const createUser = async (req, res) => {
+    const { first, last, password, email, phone, address, captcha } = req.body;
+
+    console.log(first, last, phone, email, password, address, captcha)
+    if (!first || !last || !password || !email || !phone || !address || !captcha) {
+      return res.status(400).json({ error: "Please fill out the necessar fields :)" });
     }
 
     try {
       // Checking if the user already  exists in the database
       const existingUser = await User.findOne({where: {email}})
+      console.log(existingUser)
+
 
       if (existingUser) {
         return res.status(400).json({ error: "Email already in use." });
       }
 
+// Makes sure that the captcha is correct
       if (captchas[email] !== parseInt(captcha)) {
-        return res.status(400).json("Wrong captcha, your bad");
+        return res.status(400).json("Wrong captcha");
       }
 
 
       delete captchas[email]
 
-      // Encrypting the password
+      // Hashing the password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
+
+    // Creating the user, with the data from the frontend
       const user = await User.create({
-        email,
-        password: hashedPassword,
-        name,
-        pic: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
-      });
+        firstName: first,
+        lastName: last,
+        password_hash: hashedPassword,
+        email: email,
+        phone_nr: phone,
+        address: address
+        
+    });
 
       res.status(201).json({ message: "User registered successfully!" });
 
@@ -70,10 +86,10 @@ const loginUser = async (req, res) => {
     }
 
     console.log("User found:", user.email);
-    console.log("Stored hash in DB:", user.password);
+    console.log("Stored hash in DB:", user.password_hash);
     console.log("Entered password:", password);
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.password_hash);
 
     if (!passwordMatch) {
       console.log("Password not correct dumass");
@@ -106,7 +122,8 @@ const sendCaptcha = async (req, res) => {
 
   if (!email) return res.status(400).json({ error: "Email is required" });
 
-  const captcha = 1;
+  const captcha = 1
+  // Math.floor(100000 + Math.random() * 900000);
   captchas[email] = captcha;
 
   const transporter = nodemailer.createTransport({
@@ -134,38 +151,6 @@ const sendCaptcha = async (req, res) => {
   }
 }
 
-// const sendCaptcha = async (req, res) => {
-//   const { email } = req.body;
-
-//   if (!email) return res.status(400).json({ error: "Email is required" });
-
-//   const captcha = Math.floor(100000 + Math.random() * 900000);
-//   captchas[email] = captcha;
-
-//   const transporter = nodemailer.createTransport({
-//     host: "smtp.gmail.com",
-//     port: 465,
-//     auth: {
-//       user: process.env.GNAME,
-//       pass: process.env.GPASS,
-//     },
-//   });
-
-//   const mailOptions = {
-//     from: process.env.GNAME,
-//     to: email,
-//     subject: "Your CAPTCHA Code",
-//     text: `Your verification code is: ${captcha}`,
-//   };
-
-//   try {
-//     await transporter.sendMail(mailOptions);
-//     res.json({ message: "Captcha sent successfully!" });
-//   } catch (error) {
-//     console.error("Email error:", error);
-//     res.status(500).json({ error: "Failed to send captcha email." });
-//   }
-// }
 
 const getUser = async (req, res) => {
   try {
@@ -177,24 +162,12 @@ const getUser = async (req, res) => {
     const user = await User.findOne({
       where: { id: userId },
       attributes: [
-        'id',
-        'name',
+        'firstName',
+        'lastName',
         'email',
-        'age',
-        'pic',
-        'gender',
-        'bio',
-        'minAgeP',
-        'maxAgeP',
-        'genderPref'
-      ],
-      include: [
-        {
-          model: User,
-          as: 'MatchedByUsers', // Getting all of the matches, that are associated with given user
-          attributes: ['id', 'name', 'age', 'bio', 'pic', 'gender']
-        }
-      ]
+        'phone_nr',
+        'address'
+    ],
     });
 
     console.log(user)
@@ -204,17 +177,11 @@ const getUser = async (req, res) => {
     }
 
     return res.status(200).json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      age: user.age,
-      pic: user.pic,
-      gender: user.gender,
-      bio: user.bio,
-      minAgeP: user.minAgeP,
-      maxAgeP: user.maxAgeP,
-      genderPref: user.genderPref,
-      matches: user.MatchedByUsers // full rejection user profiles
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone_nr: user.phone_nr,
+        address: user.phone_nr
     });
   } catch (err) {
     console.error("Server error:", err);

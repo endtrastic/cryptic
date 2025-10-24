@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ChartData.belongsTo(models.cryptocurrencies, {
+      ChartData.belongsTo(models.CryptoCurrency, {
         foreignKey: "crypto_id",
         as: "chart", 
       });
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     crypto_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Cryptocurrencies', 
+        model: 'CryptoCurrency', 
         key: 'id'
       },
       allowNull: false
