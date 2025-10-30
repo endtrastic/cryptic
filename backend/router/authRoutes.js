@@ -1,7 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const router = express.Router();
-const { getData, getDataFromDatabase } = require('../controller/handleinfo');
+const { getData } = require('../controller/handleinfo');
 const { createUser, loginUser, sendCaptcha, getUser } = require('../controller/handleUser');
 
 
@@ -36,10 +36,7 @@ router.post('/captcha', limiter, sendCaptcha)
 
 
 
-
-
 router.get('/cryptos', getData);
-router.get('/cryptosbase', getDataFromDatabase);
 
 
 

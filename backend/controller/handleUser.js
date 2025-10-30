@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const axios = require('axios');
 const { User } = require('../models')
-const { CryptoCurrency } = require('../models');
 
 
 
@@ -56,7 +55,7 @@ const createUser = async (req, res) => {
         phone_nr: phone,
         address: address
         
-    });
+      });
 
       res.status(201).json({ message: "User registered successfully!" });
 
@@ -87,7 +86,6 @@ const loginUser = async (req, res) => {
 
     console.log("User found:", user.email);
     console.log("Stored hash in DB:", user.password_hash);
-    console.log("Entered password:", password);
 
     const passwordMatch = await bcrypt.compare(password, user.password_hash);
 

@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     market_cap_rank: DataTypes.INTEGER,
     total_volume: DataTypes.BIGINT,
     high_24h: DataTypes.FLOAT,
-    low_24h: DataTypes.FLOAT,
+    low_24h: DataTypes.DOUBLE,
     price_change_24h: DataTypes.FLOAT,
     price_change_pct_24h: DataTypes.FLOAT,
     market_cap_change_24h: DataTypes.BIGINT,

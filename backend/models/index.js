@@ -45,5 +45,14 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 
+sequelize.sync({ force: false })  
+  .then(() => {
+    console.log('Database synchronized!');
+  })
+  .catch(err => {
+    console.error('Error syncing database:', err);
+  });
+
+
 
 module.exports = db;

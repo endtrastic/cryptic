@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'CryptoCurrency',
+    tableName: 'CryptoCurrency'
   });
   return CryptoCurrency;
 };

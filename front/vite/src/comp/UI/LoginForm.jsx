@@ -23,6 +23,9 @@ const LoginForm = ({ login, setIsLoggedIn, isLoggedIn }) => {
 
     setErrors({});
     let validationErrors = {};
+
+
+
     if (!email.includes('@')) validationErrors.email = 'Email must be valid.';
     if (password.length < 6) validationErrors.password = 'Password must be at least 6 characters.';
     if (Object.keys(validationErrors).length > 0) {
@@ -35,10 +38,8 @@ const LoginForm = ({ login, setIsLoggedIn, isLoggedIn }) => {
       const response = await login(email, password);
 
       if (response.token) {
-        // localStorage.setItem('authToken', response.token);
         console.log('Login token successful!');
         setIsLoggedIn(true)
-        // localStorage.setItem('isLoggedIn', 'true')
       }
     } catch (error) {
       setErrors({ global: 'Invalid credentials or network error.' });

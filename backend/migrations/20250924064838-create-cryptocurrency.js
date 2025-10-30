@@ -2,12 +2,15 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Cryptocurrencies', {
+    await queryInterface.createTable('CryptoCurrency', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      id1: {
+        type: Sequelize.STRING
       },
       symbol: {
         type: Sequelize.STRING
@@ -43,11 +46,12 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+      
 
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Cryptocurrencies');
+    await queryInterface.dropTable('CryptoCurrency');
   }
 };
