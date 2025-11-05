@@ -26,18 +26,31 @@ module.exports = (sequelize, DataTypes) => {
     },
     crypto_id: {
       type: DataTypes.INTEGER,
+      unique: true,
       references: {
         model: 'CryptoCurrency', 
         key: 'id'
       },
       allowNull: false
     },
-    timestamp: DataTypes.DATE,
-    price: DataTypes.FLOAT,
-    volume: DataTypes.FLOAT
+    interval: {
+      type: DataTypes.ENUM('live', '24h', '7d'), 
+      allowNull: false
+    },
+    timestamp: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    }
   }, {
     sequelize,
     modelName: 'ChartData',
+    indexes: [
+      { fields: ['crypto_id', 'interval', 'timestamp']}
+    ]
   });
   return ChartData;
 };

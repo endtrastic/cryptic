@@ -9,8 +9,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id1: {
-        type: Sequelize.STRING
+      c_id: {
+        type: Sequelize.STRING,
+        unique: true
       },
       symbol: {
         type: Sequelize.STRING

@@ -28,7 +28,15 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false
     },
-    symbol: DataTypes.STRING,
+    c_id: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+    },
+    symbol: { 
+      type: DataTypes.STRING, 
+      allowNull: false,
+    },
     name: DataTypes.STRING,
     image_url: DataTypes.TEXT,
     ath: DataTypes.FLOAT,

@@ -7,6 +7,8 @@ const dataRoutes = require('./router/authRoutes');
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
+const cron = require("node-cron");
+const { getData } = require('./controller/handleinfo');
 
 
 
@@ -33,6 +35,27 @@ app.use(
     credentials: true,
   })
 );
+
+
+cron.schedule('* * * * *', async () => {
+  console.log("fetching every 24hrs")
+  try {
+    await getData();
+  } catch (error) {
+    console.error("Error", error)
+  }
+});
+
+
+(async () => {
+  console.log("Fetching data"
+  )
+  try {
+    await getData();
+  } catch (error) {
+    console.error("Error with 1st fetch", error)
+  }
+})
 
 
 app.use('/api', dataRoutes);

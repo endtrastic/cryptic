@@ -14,7 +14,6 @@ module.exports = {
       },
       crypto_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: 'CryptoCurrency',
           key: 'id'
@@ -25,16 +24,16 @@ module.exports = {
         type: Sequelize.FLOAT
       },
       market_cap: {
-        type: Sequelize.BIGINT
+        type: Sequelize.DOUBLE
       },
       fully_diluted_valuation: {
-        type: Sequelize.BIGINT
+        type: Sequelize.DOUBLE
       },
       market_cap_rank: {
         type: Sequelize.INTEGER
       },
       total_volume: {
-        type: Sequelize.BIGINT
+        type: Sequelize.DOUBLE
       },
       high_24h: {
         type: Sequelize.FLOAT
@@ -49,7 +48,7 @@ module.exports = {
         type: Sequelize.FLOAT
       },
       market_cap_change_24h: {
-        type: Sequelize.BIGINT
+        type: Sequelize.DOUBLE
       },
       market_cap_change_pct_24h: {
         type: Sequelize.FLOAT

@@ -9,22 +9,22 @@ const { Op } = require('sequelize')
 
 
 
-const getData = async (req, res) => {
+const getData = async (req) => {
   try {
     //  Using gecko to recieve data from about 100 different top crypto currencies
     const response = await axios.get(
-      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1', {
+      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1', {
       }
     
     );
     console.log(response.data);
 
-
     const cryptoData = response.data.map(async (coin) => {
-      let crypto = await CryptoCurrency.findOne({ where: { symbol: coin.symbol } });
+      let crypto = await CryptoCurrency.findOne({ where: { c_id: coin.id } });
 
       if (!crypto) {
         crypto = await CryptoCurrency.create({
+          c_id: coin.id,
           symbol: coin.symbol,
           name: coin.name,
           image_url: coin.image,
@@ -36,6 +36,7 @@ const getData = async (req, res) => {
           roi: coin.roi,
         });
       }
+
 
       await CurrencyData.findOrCreate({
         where: { crypto_id: crypto.id },
@@ -54,60 +55,22 @@ const getData = async (req, res) => {
           circulating_supply: coin.circulating_supply,
           total_supply: coin.total_supply,
           last_updated: new Date(coin.last_updated),
-      }});
-  
-    })
+        },
+      });
+    });
 
     await Promise.all(cryptoData);
-
-    res.status(200).json({ success: true, message: "Data fetched and saved successfully" });
-
+      
+  console.log({ success: true, message: "Data fetched and saved successfully" });
   } catch (error) {
-    console.error('Error fetching crypto data:', error);
-    res.status(500).json({ success: false, error: 'Error fetching data' });
-  }
-};
+    throw new Error("Im going to hurt the baby, aka myself")
+    // console.error("Somethings is very moldy", error)
+  };
 
-
-const getBTC7DayChart = async () => {
-  try {
-    const response = await axios.get(
-      'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart',
-      {
-        params: {
-          vs_currency: 'usd',
-          days: 7,
-        }
-      }
-    );
-
-    const prices = response.data.prices;
-    console.log(prices);
-  } catch (error) {
-    console.error('Error fetching BTC chart data:', error.response?.data || error.message);
-  }
 };
 
 
 
-const getBTC1DayChart = async () => {
-  try {
-    const response = await axios.get(
-      'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart',
-      {
-        params: {
-          vs_currency: 'usd',
-          days: 1,
-        }
-      }
-    );
-
-    const prices = response.data.prices;
-    console.log(prices);
-  } catch (error) {
-    console.error('Error fetching BTC chart data:', error.response?.data || error.message);
-  }
-};
 
 
 

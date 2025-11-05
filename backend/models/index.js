@@ -45,13 +45,13 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 
-sequelize.sync({ force: false })  
+sequelize.sync({ force: true })  
   .then(() => {
     console.log('Database synchronized!');
   })
   .catch(err => {
     console.error('Error syncing database:', err);
-  });
+});
 
 
 

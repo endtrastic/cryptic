@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     crypto_id: {
       type: DataTypes.INTEGER,
+      unique: true,
       references: {
         model: 'CryptoCurrency', 
         key: 'id'
@@ -36,15 +37,15 @@ module.exports = (sequelize, DataTypes) => {
 
     
     current_price: DataTypes.FLOAT,
-    market_cap: DataTypes.BIGINT,
-    fully_diluted_valuation: DataTypes.BIGINT,
+    market_cap: DataTypes.DOUBLE,
+    fully_diluted_valuation: DataTypes.DOUBLE,
     market_cap_rank: DataTypes.INTEGER,
-    total_volume: DataTypes.BIGINT,
+    total_volume: DataTypes.DOUBLE,
     high_24h: DataTypes.FLOAT,
     low_24h: DataTypes.DOUBLE,
     price_change_24h: DataTypes.FLOAT,
     price_change_pct_24h: DataTypes.FLOAT,
-    market_cap_change_24h: DataTypes.BIGINT,
+    market_cap_change_24h: DataTypes.DOUBLE,
     market_cap_change_pct_24h: DataTypes.FLOAT,
     circulating_supply: DataTypes.FLOAT,
     total_supply: DataTypes.FLOAT,

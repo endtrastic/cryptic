@@ -5,30 +5,6 @@ import Card from "../comp/UI/Card";
 const Home = () => {
   console.log("Hi");
 
-  const [data, setData] = useState([])
-
-  useEffect(() => { 
-    const DataFetching = async () => {
-      try {
-        const response = await fetch("http://localhost:5552/api/cryptos", {
-            method: "GET",
-            credentials: "include"
-          })
-        if (response.ok) {
-          const result = await response.json();
-          setData(result.CurrencyData)
-        } else {
-          console.error("God damnit, another one");
-        }
-      } catch (error) {
-        console.error("Error fetching nthe data: ", error);
-      }
-    }
-    DataFetching();
-
-  }, [])
-
-
   console.log("This is the data: ", data)
 
 
