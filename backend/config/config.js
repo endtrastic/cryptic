@@ -21,6 +21,7 @@ module.exports = {
       dialectOptions: {
         // some ipv4 stuff, also had to disable ipv6 https://stackoverflow.com/questions/49015634/error-connect-enetunreach
     family: 4,
+    logging: false,
   },
   },
   test: {
@@ -32,6 +33,7 @@ module.exports = {
     dialect: 'postgres',
       dialectOptions: {
     family: 4,
+    logging: false,
   },
   },
   production: {
@@ -43,6 +45,7 @@ module.exports = {
     dialect: 'postgres',
       dialectOptions: {
     family: 4,
+    logging: false,
   },
   },
 };

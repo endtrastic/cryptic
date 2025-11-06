@@ -8,7 +8,7 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const cron = require("node-cron");
-const { getData } = require('./controller/handleinfo');
+const { getData, getChart } = require('./controller/handleinfo');
 
 
 
@@ -18,7 +18,6 @@ PORTfavor = process.env.PORT
 
 
 console.log("DB HOST, AND THE JWT TOKEN:", process.env.DB_HOST, process.env.JWT_TOKEN);
-
 
 
 
@@ -36,7 +35,6 @@ app.use(
   })
 );
 
-
 cron.schedule('* * * * *', async () => {
   console.log("fetching every 24hrs")
   try {
@@ -45,7 +43,6 @@ cron.schedule('* * * * *', async () => {
     console.error("Error", error)
   }
 });
-
 
 (async () => {
   console.log("Fetching data"

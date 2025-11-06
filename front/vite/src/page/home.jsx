@@ -5,7 +5,7 @@ import Card from "../comp/UI/Card";
 const Home = () => {
   console.log("Hi");
 
-  console.log("This is the data: ", data)
+  // console.log("This is the data: ", data)
 
 
 
@@ -13,7 +13,7 @@ const Home = () => {
     <Card className="Hi">
       <h1>Hi users</h1>
       <div>
-        {data.length > 0 ? (
+        {/* {data.length > 0 ? (
           data.map((coin, index) => (
             <div key={index}>
               <h3>{coin.name} ({coin.symbol})</h3>
@@ -23,7 +23,7 @@ const Home = () => {
           ))
         ) : (
           <p>Loading...</p>
-        )}
+        )} */}
       </div>
     </Card>
   );

@@ -26,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     crypto_id: {
       type: DataTypes.INTEGER,
-      unique: true,
       references: {
         model: 'CryptoCurrency', 
         key: 'id'
@@ -39,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     timestamp: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
     },
     price: {
       type: DataTypes.FLOAT,
@@ -49,7 +48,10 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'ChartData',
     indexes: [
-      { fields: ['crypto_id', 'interval', 'timestamp']}
+      {
+      unique: true,
+      fields: ['crypto_id', 'interval', 'timestamp']
+      }
     ]
   });
   return ChartData;
