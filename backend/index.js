@@ -8,7 +8,7 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const cron = require("node-cron");
-const { getData, getChart } = require('./controller/handleinfo');
+const { getData, DelTable } = require('./controller/handleinfo');
 
 
 
@@ -34,9 +34,20 @@ app.use(
     credentials: true,
   })
 );
+//  0 0 * * 0 every week sunday runs whatever the fuck
 
-cron.schedule('* * * * *', async () => {
-  console.log("fetching every 24hrs")
+
+cron.schedule('0 0 * * 0', async () => {
+  console.log("Running this truncate tables func every Sunday on 0:00")
+  try {
+    await DelTable();
+  } catch (error) {
+    console.error("Error", error)
+  }
+});
+
+cron.schedule('1 0 * * 0', async () => {
+  console.log("fetching data every Sunday at 0:01")
   try {
     await getData();
   } catch (error) {
@@ -44,15 +55,16 @@ cron.schedule('* * * * *', async () => {
   }
 });
 
-(async () => {
-  console.log("Fetching data"
-  )
+// Testing rn
+
+cron.schedule('* * * * *', async () => {
+  console.log("fetching data every Sunday at 0:01")
   try {
     await getData();
   } catch (error) {
-    console.error("Error with 1st fetch", error)
+    console.error("Error", error)
   }
-})
+});
 
 
 app.use('/api', dataRoutes);

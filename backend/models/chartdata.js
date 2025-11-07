@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     indexes: [
       {
       unique: true,
-      fields: ['crypto_id', 'interval', 'timestamp']
+      fields: ['crypto_id', 'interval', 'price']
       }
     ]
   });

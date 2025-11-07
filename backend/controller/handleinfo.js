@@ -8,6 +8,15 @@ const { CryptoCurrency, CurrencyData, ChartData } = require('../models')
 const { Op, ConnectionTimedOutError } = require('sequelize')
 
 
+const DelTable = async (req) => {
+  try {
+    await ChartData.truncate()
+  } catch (error) {
+    console.error("Scary error message yet again", error)
+  }
+}
+
+
 
 const getData = async (req) => {
   for (i=1; i < 6; i += 1) {
@@ -88,36 +97,54 @@ const getData = async (req) => {
           );
 
           // Chart data that is being fetched doesnt have a timestamp, so I need to add the hourly to it
-          const prices = coin.sparkline_in_7d.price;
-          const time = new Date(coin.last_updated);
-
-          const intervalForChart = (7 * 24 * 60 * 1000) / prices.length;
-
-
-
-
+          
+          
           // I have no inherent fix for the data insertion yet, using unique filtering in the
           //  backend causes only 400 rows to be entered to the database, I am assuming it is
           // caused by duplicate value that is then raising some sort of error that im not seeing
           // because I haven't fixed the logging problem. If I dont use the unique filtering then 
           // the obvious happens, where the same data gets inserted over and over again.
-          const chartTime = prices.map((price, i) => {
-              const rawTime = time.getTime() - (prices.length - 1 - i) * intervalForChart;
-              const timestamp = new Date(rawTime);
+
+          // What I am thinking about: Getting the current date, and then moving that to a week ago so I could map the price values together, with the hourly
+          // to then keep incrementing the time by one hour, until it reaches the starting date again, and at that point it gets reset, so the next map could happen
+          try {
+            const prices = coin.sparkline_in_7d.price;
+
+            const time = new Date(coin.last_updated);
+            //  Getting the date from 1 week ago 
+            Math.floor(time.setDate(time.getDate() - 7));
+            // 168 cuz its how many hours are in 1 week
+            const intervalForChart = 168;
+
+            const chartTime = prices.map((price) => {
+                // const rawTime = time.getTime() - (prices.length - 1 - i) * intervalForChart;
+                // const timestamp = new Date(rawTime) + ((60 * 1000) * 60);
+                  var timestamp = Math.floor(time.setTime(time.getTime() + (60 * 1000 * (60))));
+                
+                  
+                  console.log(time)
                 return {
-                  crypto_id: crypto.id,
-                  interval: '7d',
-                  timestamp,
-                  price
-                }
-          })
+                    crypto_id: crypto.id,
+                    interval: '7d',
+                    timestamp,
+                    price
+                  }
+            })
 
 
-          await ChartData.bulkCreate(chartTime, {
-            updateOnDuplicate: ['price']
+            await ChartData.bulkCreate(chartTime, {
+              updateOnDuplicate: ['price']
+              
+            })
+
+
+
             
-          })
-          
+
+          } catch (SequelizeUniqueConstraintError) {
+            return;
+          }
+
         }
       });
       await Promise.all(cryptoData);
@@ -138,5 +165,5 @@ const getData = async (req) => {
 
 
 module.exports = { 
-  getData
+  getData, DelTable
 }

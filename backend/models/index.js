@@ -50,6 +50,7 @@ db.Sequelize = Sequelize;
 sequelize.sync({ force: true })  
   .then(() => {
     console.log('Database synchronized!');
+    
   })
   .catch(err => {
     console.error('Error syncing database:', err);
