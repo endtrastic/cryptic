@@ -9,6 +9,7 @@ const http = require("http");
 const server = http.createServer(app);
 const cron = require("node-cron");
 const { getData, DelTable } = require('./controller/handleinfo');
+const { RecieveCoin } = require('./controller/handleGraph');
 
 
 
@@ -37,34 +38,34 @@ app.use(
 //  0 0 * * 0 every week sunday runs whatever the fuck
 
 
-cron.schedule('0 0 * * 0', async () => {
-  console.log("Running this truncate tables func every Sunday on 0:00")
-  try {
-    await DelTable();
-  } catch (error) {
-    console.error("Error", error)
-  }
-});
+// cron.schedule('0 0 * * 0', async () => {
+//   console.log("Running this truncate tables func every Sunday on 0:00")
+//   try {
+//     await DelTable();
+//   } catch (error) {
+//     console.error("Error", error)
+//   }
+// });
 
-cron.schedule('1 0 * * 0', async () => {
-  console.log("fetching data every Sunday at 0:01")
-  try {
-    await getData();
-  } catch (error) {
-    console.error("Error", error)
-  }
-});
+// cron.schedule('1 0 * * 0', async () => {
+//   console.log("fetching data every Sunday at 0:01")
+//   try {
+//     await getData();
+//   } catch (error) {
+//     console.error("Error", error)
+//   }
+// });
 
-// Testing rn
+// // Testing rn
 
-cron.schedule('* * * * *', async () => {
-  console.log("fetching data every Sunday at 0:01")
-  try {
-    await getData();
-  } catch (error) {
-    console.error("Error", error)
-  }
-});
+// cron.schedule('* * * * *', async () => {
+//   console.log("fetching data every Sunday at 0:01")
+//   try {
+//     await getData();
+//   } catch (error) {
+//     console.error("Error", error)
+//   }
+// });
 
 
 app.use('/api', dataRoutes);

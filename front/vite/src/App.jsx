@@ -20,18 +20,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
-  try {
-    const ok = fetch("http://localhost:5552/auth/verify") {
-    }
-    if (ok.ok) {
-      console.log("YEEES")
-    } else {
-      console.log("NOOOO")
 
-    }
-  } catch (error) {
-    console.error("Error console now", error)
-  }
   console.log("Info received", Info)
 
   useEffect(() => {

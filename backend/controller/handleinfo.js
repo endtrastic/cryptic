@@ -163,6 +163,8 @@ const getData = async (req) => {
   }  
 }
 
+// Coinpaprika / coinmarketcap api implementation
+
 
 module.exports = { 
   getData, DelTable

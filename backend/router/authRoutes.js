@@ -3,7 +3,7 @@ const rateLimit = require('express-rate-limit');
 const router = express.Router();
 const { getData } = require('../controller/handleinfo');
 const { createUser, loginUser, sendCaptcha, getUser } = require('../controller/handleUser');
-
+const { RecieveFront, RecieveCoin } = require('../controller/handleGraph');
 
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute window
@@ -23,7 +23,12 @@ router.post('/signup', limiter, createUser);
 router.post('/login', limiter, loginUser);
 
 // CAPTCHA ROUTE
+
 router.post('/captcha', limiter, sendCaptcha)
+
+
+router.get('/coins', RecieveCoin)
+
 
 // Getting the user /getuser
 // router.get('/getUser', authenticateToken,  getUser)
@@ -32,11 +37,6 @@ router.post('/captcha', limiter, sendCaptcha)
 
 // ----------------------------------------------
 
-
-
-
-
-router.get('/cryptos', getData);
 
 
 
